@@ -1,0 +1,46 @@
+name: Build2
+on:
+  workflow_dispatch:
+jobs:
+  build-job:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-13, macos-latest]
+      fail-fast: false
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4 
+      - name: Build artifacts
+        run: |
+          if ($env:RUNNER_OS -eq "Windows") {
+            nmake /F Makefile.msvc build_shared
+          } else {
+            make build_shared
+          }
+
+          New-Item -ItemType Directory -Path artifacts -Force
+
+          if ($env:RUNNER_OS -eq "macOS") {
+            $arch = & uname -m
+            if ($arch -eq "arm64") {
+              New-Item -ItemType Directory -Path artifacts/macos_arm64 -Force
+              mv libpg_query.dylib artifacts/macos_arm64/libpg.dylib
+            } else {
+              New-Item -ItemType Directory -Path artifacts/macos_x86_64 -Force
+              mv libpg_query.dylib artifacts/macos_x86_64/libpg.dylib
+            }
+          } else {
+            mv libpg_query.so artifacts/
+            if (Test-Path libpg_query.dll) {
+              mv libpg_query.dll artifacts/
+            }
+          }
+        shell: pwsh
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifacts-${{ matrix.os }}
+          path: artifacts
+          retention-days: 1
+          overwrite: true
