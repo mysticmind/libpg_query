@@ -14,7 +14,7 @@ all: examples test build
 
 build: $(ARLIB)
 
-build_shared: $(SOLIB)
+build_shared: $(ARLIB) $(SOLIB)
 
 clean:
 	$(RM) *.obj
