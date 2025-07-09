@@ -36,7 +36,10 @@ jobs:
               mv libpg_query.dylib artifacts/macos_x86_64/libpg.dylib
             }
           } else {
-            mv libpg_query.so artifacts/
+            if (Test-Path libpg_query.so) {
+              mv libpg_query.so artifacts/
+            }
+
             if (Test-Path libpg_query.dll) {
               mv libpg_query.dll artifacts/
             }
