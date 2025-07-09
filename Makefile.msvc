@@ -29,8 +29,7 @@ $(ARLIB): clean $(SRC_FILES)
     lib /OUT:pg_query.lib *.obj
 
 $(SOLIB): clean $(SRC_FILES)
-	$(CC) $(CFLAGS) /LD $(SRC_FILES)
-    /link /OUT:pg_query.dll /IMPLIB:pg_query.lib
+	$(CC) $(CFLAGS) /LD $(SRC_FILES) /link /OUT:pg_query.dll /IMPLIB:pg_query.lib
 
 EXAMPLES = examples/simple examples/scan examples/normalize examples/simple_error examples/normalize_error examples/simple_plpgsql
 examples: $(EXAMPLES)
