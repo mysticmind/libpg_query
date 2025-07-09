@@ -1,4 +1,4 @@
-name: Build2
+name: build-shared
 on:
   workflow_dispatch:
 jobs:
@@ -11,6 +11,11 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4 
+      - name: Configure MSVC developer console
+        if: matrix.os == 'windows-latest'
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: x64 
       - name: Build artifacts
         run: |
           if ($env:RUNNER_OS -eq "Windows") {
