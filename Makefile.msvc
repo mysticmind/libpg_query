@@ -19,7 +19,8 @@ build_shared: $(SOLIB)
 clean:
 	$(RM) *.obj
 	$(RM) pg_query.lib
-	build_shared: $(SOLIB)
+	$(RM) pg_query.dll
+	$(RM) pg_query.exp
 
 .PHONY: all clean build build_shared extract_source examples test install
 
