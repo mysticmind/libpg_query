@@ -33,8 +33,7 @@ $(STATIC_LIB): $(SRC_FILES)
 
 $(SHARED_LIB): $(SRC_FILES)
 	gcc $(CFLAGS) -DBUILDING_DLL -c $(SRC_FILES)
-	gcc -shared -o $(SHARED_LIB) *.o -Wl,--export-all-symbols -Wl,--out-implib,$(IMPLIB)
-    @if not exist $(SHARED_LIB) (echo DLL NOT CREATED! & exit 1) else (echo ✅ DLL CREATED: $(SHARED_LIB))
+	gcc -shared -o $(SHARED_LIB) *.o -Wl,--export-all-symbols -Wl,--enable-auto-import -Wl,--out-implib,$(IMPLIB)
 
 examples: $(EXAMPLES)
 
