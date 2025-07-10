@@ -1,0 +1,47 @@
+TARGET = pg_query
+STATIC_LIB = lib$(TARGET).a
+SHARED_LIB = $(TARGET).dll
+IMPLIB = lib$(TARGET).dll.a
+
+SRC_FILES = src/*.c src/postgres/*.c vendor/protobuf-c/protobuf-c.c vendor/xxhash/xxhash.c protobuf/pg_query.pb-c.c
+
+CFLAGS = -I. -I./vendor -I./src/postgres/include -I./src/include -I./src/postgres/include/port/win32 -I./src/postgres/include/port/win32_msvc -Wall
+
+RM = del /f /q
+
+EXAMPLES = examples/simple.exe examples/scan.exe examples/normalize.exe examples/simple_error.exe examples/normalize_error.exe examples/simple_plpgsql.exe
+TESTS = test/deparse.exe test/fingerprint.exe test/fingerprint_opts.exe test/normalize.exe test/parse.exe test/parse_opts.exe test/parse_protobuf.exe test/parse_protobuf_opts.exe test/parse_plpgsql.exe test/scan.exe test/split.exe
+
+.PHONY: all clean build build_shared examples test
+
+all: build examples test
+
+clean:
+	-$(RM) *.o *.obj *.dll *.a *.lib *.exp *.exe
+	-$(RM) examples\*.exe
+	-$(RM) test\*.exe
+
+build: $(STATIC_LIB)
+
+build_shared: $(SHARED_LIB)
+
+OBJECTS = $(SRC_FILES:.c=.o)
+
+$(STATIC_LIB): $(SRC_FILES)
+	gcc $(CFLAGS) -c $(SRC_FILES)
+	ar rcs $(STATIC_LIB) *.o
+
+$(SHARED_LIB): $(SRC_FILES)
+	gcc $(CFLAGS) -DBUILDING_DLL -c $(SRC_FILES)
+	gcc -shared -o $(SHARED_LIB) *.o -Wl,--out-implib,$(IMPLIB)
+
+examples: $(EXAMPLES)
+
+examples/%.exe: examples/%.c $(STATIC_LIB)
+	gcc $(CFLAGS) -o $@ $< $(STATIC_LIB)
+
+test: $(TESTS)
+	for %%f in ($(TESTS)) do %%f || exit /b 1
+
+test/%.exe: test/%.c $(STATIC_LIB)
+	gcc $(CFLAGS) -o $@ $< $(STATIC_LIB)
