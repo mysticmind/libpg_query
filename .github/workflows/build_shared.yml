@@ -38,10 +38,10 @@ jobs:
             $arch = & uname -m
             if ($arch -eq "arm64") {
               New-Item -ItemType Directory -Path artifacts/macos_arm64 -Force
-              mv libpg_query.dylib artifacts/macos_arm64/libpg.dylib
+              mv libpg_query.dylib artifacts/macos_arm64/libpg_query.dylib
             } else {
               New-Item -ItemType Directory -Path artifacts/macos_x86_64 -Force
-              mv libpg_query.dylib artifacts/macos_x86_64/libpg.dylib
+              mv libpg_query.dylib artifacts/macos_x86_64/libpg_query.dylib
             }
           } else {
             if (Test-Path libpg_query.so) {
