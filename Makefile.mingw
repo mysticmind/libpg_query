@@ -33,7 +33,7 @@ $(STATIC_LIB): $(SRC_FILES)
 
 $(SHARED_LIB): $(SRC_FILES)
 	gcc $(CFLAGS) -DBUILDING_DLL -c $(SRC_FILES)
-	gcc -shared -o $(SHARED_LIB) *.o -Wl,--export-all-symbols -Wl,--enable-auto-import -Wl,--out-implib,$(IMPLIB)
+	gcc -shared -o pg_query.dll *.o pg_query.def -Wl,--enable-auto-import -Wl,--out-implib,$(IMPLIB)
 
 examples: $(EXAMPLES)
 
