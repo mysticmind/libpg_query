@@ -54,9 +54,20 @@ jobs:
           }
         shell: pwsh
       - name: Upload artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: build-artifacts-${{ matrix.os }}
           path: artifacts
           retention-days: 1
           overwrite: true
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: all-artifacts
+          merge-multiple: true
+      - name: Upload single zip artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifacts-all
+          path: final-artifacts.zip
+          retention-days: 1
