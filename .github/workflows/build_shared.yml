@@ -12,17 +12,23 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4 
-      - name: Configure mingw
+      - name: Configure MSVC developer console
         if: matrix.os == 'windows-latest'
-        uses: msys2/setup-msys2@v2
+        uses: ilammy/msvc-dev-cmd@v1
         with:
-          install: >-
-            mingw-w64-x86_64-gcc
-            make
+          arch: x64
+      # - name: Configure mingw
+      #   if: matrix.os == 'windows-latest'
+      #   uses: msys2/setup-msys2@v2
+      #   with:
+      #     install: >-
+      #       mingw-w64-x86_64-gcc
+      #       make
       - name: Build artifacts
         run: |
           if ($env:RUNNER_OS -eq "Windows") {
-            make -f Makefile.mingw build_shared
+            nmake /F Makefile.msvc build_shared
+            # make -f Makefile.mingw build_shared
           } else {
             make build_shared
           }
