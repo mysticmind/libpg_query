@@ -28,6 +28,7 @@ jobs:
         run: |
           if ($env:RUNNER_OS -eq "Windows") {
             nmake /F Makefile.msvc build_shared
+            dir D:\a\libpg_query\libpg_query\pg_query.*
             # make -f Makefile.mingw build_shared
           } else {
             make build_shared
