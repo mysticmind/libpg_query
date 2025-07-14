@@ -1,23 +1,13 @@
 LIBRARY pg_query
 EXPORTS
-    pg_query_init
     pg_query_parse
-    pg_query_parse_with_spec
     pg_query_normalize
-    pg_query_deparse_protobuf
-    pg_query_format_protobuf
-    pg_query_split
     pg_query_split_with_parser
     pg_query_fingerprint
-    pg_query_free
+    pg_query_exit
     pg_query_free_parse_result
     pg_query_free_normalize_result
-    pg_query_free_deparse_protobuf_result
-    pg_query_free_format_protobuf_result
     pg_query_free_split_result
     pg_query_free_fingerprint_result
-    pg_query_exit
-    pg_query_parse_protobuf
-    pg_query_parse_protobuf_with_spec
-    pg_query_free_parse_protobuf_result
+
 
