@@ -69,6 +69,10 @@ jobs:
         with:
           path: all-artifacts
           merge-multiple: true
+      - name: Zip all artifacts
+        run: |
+          cd all-artifacts
+          zip -r ../final-artifacts.zip .
       - name: Upload single zip artifact
         uses: actions/upload-artifact@v4
         with:
