@@ -3,7 +3,8 @@
 TARGET = pg_query
 ARLIB = lib$(TARGET).lib
 SOLIB = lib$(TARGET).dll
-GEN_DEF = gen_def.ps1
+DEF = $(TARGET).def
+HEADER = $(TARGET).h
 
 SRC_FILES = src/*.c src/postgres/*.c vendor/protobuf-c/protobuf-c.c vendor/xxhash/xxhash.c protobuf/pg_query.pb-c.c
 
@@ -25,11 +26,16 @@ clean:
 
 .PHONY: all clean build build_shared extract_source examples test install
 
-gen_def: $(GEN_DEF)
-	powershell -ExecutionPolicy Bypass -File $(GEN_DEF)
+$(DEF): $(TARGET) $(HEADER)
+        @echo LIBRARY $(TARGET) > $(DEF)
+	@echo EXPORTS > $(DEF)
+	@powershell -NoProfile -Command ^
+	"Select-String -Path '$(HEADER)' -Pattern '\bpg_query_[a-zA-Z0-9_]+' | ForEach-Object { ^
+		if ($_ -match '\bpg_query_[a-zA-Z0-9_]+') { $matches[0] } } | ^
+		Where-Object { $_ -ne 'pg_query_init' } >> '$(DEF)'"
 
-print_def:
-	@type pg_query.def
+print_def: $(DEF)
+	@type $(DEF)
 
 $(ARLIB): clean $(SRC_FILES)
 	$(CC) $(CFLAGS) /c $(SRC_FILES)
