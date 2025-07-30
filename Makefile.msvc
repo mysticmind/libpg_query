@@ -3,6 +3,8 @@
 TARGET = pg_query
 ARLIB = lib$(TARGET).lib
 SOLIB = lib$(TARGET).dll
+DEF = pg_query.def
+HEADER = pg_query.h
 
 SRC_FILES = src/*.c src/postgres/*.c vendor/protobuf-c/protobuf-c.c vendor/xxhash/xxhash.c protobuf/pg_query.pb-c.c
 
@@ -24,11 +26,20 @@ clean:
 
 .PHONY: all clean build build_shared extract_source examples test install
 
+$(DEF): $(HEADER)
+	@echo LIBRARY pg_query > $(DEF)
+	@echo EXPORTS >> $(DEF)
+	@for /f "usebackq tokens=*" %%F in (`findstr /R "^.*[ ]pg_query_[a-zA-Z0-9_]*(.*" $(HEADER)`) do \
+		set "line=%%F" & \
+		echo %%F | sed -E "s/.*\b(pg_query_[a-zA-Z0-9_]+)[ \t]*\(.*/    \1/" | \
+		findstr /V "pg_query_init" >> $(DEF)
+	@type $(DEF)
+
 $(ARLIB): clean $(SRC_FILES)
 	$(CC) $(CFLAGS) /c $(SRC_FILES)
     lib /OUT:pg_query.lib *.obj
 
-$(SOLIB): clean $(SRC_FILES)
+$(SOLIB): clean $(DEF) $(SRC_FILES)
 	$(CC) $(CFLAGS) /c $(SRC_FILES)
 	dir *.obj
 	link /DLL /DEF:pg_query.def /OUT:$(SOLIB) *.obj
