@@ -27,7 +27,13 @@ clean:
 create_def:
 	@echo LIBRARY $(TARGET) > $(DEF)
 	@echo EXPORTS > $(DEF)
-	@powershell -Command "Select-String -Path '$(HEADER)' -Pattern 'pg_query_[a-zA-Z0-9_]+' | ForEach-Object { if ($_ -match 'pg_query_[a-zA-Z0-9_]+') { $matches[0] } } | Where-Object { \$_ -ne 'pg_query_init' } >> '$(DEF)'"
+	@powershell -NoLogo -NoProfile -Command ^
+		"Get-Content '$(HEADER)' | ^
+		Select-String -Pattern '\bpg_query_[a-zA-Z0-9_]+(?=\s*\()' | ^
+		ForEach-Object { ($_ -split '\s+')[0] } | ^
+		Where-Object { $_ -ne 'pg_query_init' } | ^
+		Sort-Object -Unique | ^
+		ForEach-Object { '    ' + $_ } >> '$(DEF)'"
 
 print_def:
 	@type $(DEF)
