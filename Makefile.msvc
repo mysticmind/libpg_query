@@ -41,7 +41,7 @@ $(ARLIB): clean $(SRC_FILES)
 	$(CC) $(CFLAGS) /c $(SRC_FILES)
     lib /OUT:pg_query.lib *.obj
 
-$(SOLIB): clean gen_def print_def $(SRC_FILES)
+$(SOLIB): clean $(DEF) print_def $(SRC_FILES)
 	$(CC) $(CFLAGS) /c $(SRC_FILES)
 	dir *.obj
 	link /DLL /DEF:pg_query.def /OUT:$(SOLIB) *.obj
