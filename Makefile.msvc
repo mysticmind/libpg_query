@@ -28,7 +28,8 @@ clean:
 	if exist libpg_query.exp $(RM) pg_query.exp
 
 create_def:
-	$(PWSH_EXE) -ExecutionPolicy Bypass -NoProfile -File $(GENERATE_DEF_SCRIPT)
+	$(PWSH_EXE) -ExecutionPolicy Bypass -NoProfile -Command "$functions = (Get-Content pg_query.h | ForEach-Object { if ($_ -cmatch '\b(pg_query_\w+)\s*\(') { $fn = $matches[1]; if ($fn -ne 'pg_query_init') { '    ' + $fn } } } | Out-String).Trim() -split [Environment]::NewLine; $output = @('LIBRARY pg_query', 'EXPORTS') + $functions; $output | Set-Content pg_query.def"
+
 
 print_def:
     @type $(DEF)
