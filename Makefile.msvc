@@ -25,7 +25,7 @@ clean:
 	if exist libpg_query.exp $(RM) pg_query.exp
 
 create_def:
-	@call run_generate_def.bat
+	@call generate_def.bat
 
 print_def:
     @type $(DEF)
