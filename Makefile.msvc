@@ -24,7 +24,7 @@ clean:
 	if exist libpg_query.exp $(RM) pg_query.exp
 
 create_def:
-    powershell -ExecutionPolicy Bypass -File $(GENERATE_DEF_SCRIPT)
+    powershell -ExecutionPolicy Bypass -File ./$(GENERATE_DEF_SCRIPT)
 
 print_def:
     @type $(DEF)
