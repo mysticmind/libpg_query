@@ -11,6 +11,8 @@ CFLAGS = -I. -I./vendor -I./src/postgres/include -I./src/include -I./src/postgre
 
 RM = del
 
+.SUFFIXES:
+
 all: examples test build
 
 build: $(ARLIB)
