@@ -3,8 +3,7 @@
 TARGET = pg_query
 ARLIB = lib$(TARGET).lib
 SOLIB = lib$(TARGET).dll
-DEF = $(TARGET).def
-HEADER = $(TARGET).h
+GENERATE_DEF_SCRIPT = generate-def.ps1
 
 SRC_FILES = src/*.c src/postgres/*.c vendor/protobuf-c/protobuf-c.c vendor/xxhash/xxhash.c protobuf/pg_query.pb-c.c
 
@@ -25,12 +24,10 @@ clean:
 	if exist libpg_query.exp $(RM) pg_query.exp
 
 create_def:
-	@echo LIBRARY $(TARGET) > $(DEF)
-	@echo EXPORTS > $(DEF)
-	@powershell -NoLogo -NoProfile -Command "Get-Content '$(HEADER)' | Select-String -Pattern '\bpg_query_[a-zA-Z0-9_]+(?=\s*\()' | ForEach-Object { ($_ -split '\s+')[0] } | Where-Object { $_ -ne 'pg_query_init' } | Sort-Object -Unique | ForEach-Object { '    ' + $_ } >> '$(DEF)'"
+    powershell -ExecutionPolicy Bypass -File $(GENERATE_DEF_SCRIPT)
 
 print_def:
-	@type $(DEF)
+    @type $(DEF)
 
 .PHONY: all clean build build_shared extract_source examples test install
 
