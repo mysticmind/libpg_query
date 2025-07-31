@@ -24,7 +24,7 @@ clean:
 	if exist libpg_query.exp $(RM) pg_query.exp
 
 create_def:
-    @powershell -ExecutionPolicy Bypass -Command "Set-Location . ; ./generate_def.ps1"
+	powershell -ExecutionPolicy Bypass -NoProfile -File "generate_def.ps1"
 
 print_def:
     @type $(DEF)
