@@ -3,7 +3,6 @@
 TARGET = pg_query
 ARLIB = lib$(TARGET).lib
 SOLIB = lib$(TARGET).dll
-GENERATE_DEF_SCRIPT = generate_def.ps1
 
 SRC_FILES = src/*.c src/postgres/*.c vendor/protobuf-c/protobuf-c.c vendor/xxhash/xxhash.c protobuf/pg_query.pb-c.c
 
@@ -26,7 +25,7 @@ clean:
 	if exist libpg_query.exp $(RM) pg_query.exp
 
 create_def:
-	cmd /c powershell -ExecutionPolicy Bypass -NoProfile -File generate_def.ps1
+	run_generate_def.bat
 
 print_def:
     @type $(DEF)
