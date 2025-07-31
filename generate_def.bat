@@ -1,2 +1,2 @@
 @echo off
-powershell -ExecutionPolicy Bypass -NoProfile -File generate_def.ps1
+pwsh -ExecutionPolicy Bypass -NoProfile -File generate_def.ps1
