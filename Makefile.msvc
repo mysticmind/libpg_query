@@ -30,9 +30,6 @@ clean:
 create_def:
 	$(PWSH_EXE) $(GENERATE_DEF_SCRIPT)
 
-print_def:
-    @type pg_query.def
-
 .PHONY: all clean build build_shared extract_source examples test install
 
 $(ARLIB): clean $(SRC_FILES)
