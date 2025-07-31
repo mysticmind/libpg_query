@@ -28,10 +28,10 @@ clean:
 	if exist libpg_query.exp $(RM) pg_query.exp
 
 create_def:
-	$(PWSH_EXE) -NoLogo -ExecutionPolicy Bypass -Command "$$functions = (Get-Content pg_query.h | ForEach-Object { if ($$_ -cmatch '\b(pg_query_\w+)\s*\(') { $$fn = $$matches; if ($$fn -ne 'pg_query_init') { '    ' + $$fn } } } | Out-String).Trim() -split [Environment]::NewLine; $$output = @('LIBRARY pg_query', 'EXPORTS') + $$functions; $$output | Set-Content pg_query.def"
+	$(PWSH_EXE) $(GENERATE_DEF_SCRIPT)
 
 print_def:
-    @type $(DEF)
+    @type pg_query.def
 
 .PHONY: all clean build build_shared extract_source examples test install
 
