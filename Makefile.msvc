@@ -4,6 +4,9 @@ TARGET = pg_query
 ARLIB = lib$(TARGET).lib
 SOLIB = lib$(TARGET).dll
 
+PWSH_EXE = pwsh.exe
+GENERATE_DEF_SCRIPT = generate_def.ps1
+
 SRC_FILES = src/*.c src/postgres/*.c vendor/protobuf-c/protobuf-c.c vendor/xxhash/xxhash.c protobuf/pg_query.pb-c.c
 
 CFLAGS = -I. -I./vendor -I./src/postgres/include -I./src/include -I./src/postgres/include/port/win32 -I./src/postgres/include/port/win32_msvc
@@ -25,7 +28,7 @@ clean:
 	if exist libpg_query.exp $(RM) pg_query.exp
 
 create_def:
-	@call generate_def.bat
+	$(PWSH_EXE) -ExecutionPolicy Bypass -NoProfile -File $(GENERATE_DEF_SCRIPT)
 
 print_def:
     @type $(DEF)
